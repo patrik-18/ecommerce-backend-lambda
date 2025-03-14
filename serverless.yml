@@ -3,7 +3,7 @@ service: ecommerce-backend
 provider:
   name: aws
   runtime: python3.11
-  region: eu-central-1
+  region: eu-west-1
   stage: prod
   iamRoleStatements:
     - Effect: Allow
@@ -11,6 +11,9 @@ provider:
         - dynamodb:*
         - secretsmanager:GetSecretValue
       Resource: '*'
+
+custom:
+  enterprise: false
 
 functions:
   processOrder:

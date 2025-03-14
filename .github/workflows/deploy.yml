@@ -12,13 +12,13 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set Up Node.js
+      - name: Set Up Node.js (Ensure Compatibility)
         uses: actions/setup-node@v4
         with:
           node-version: '18'
 
-      - name: Install Serverless Framework
-        run: npm install -g serverless
+      - name: Install Serverless Community Version
+        run: npm install -g serverless@3
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
