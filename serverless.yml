@@ -1,0 +1,21 @@
+service: ecommerce-backend
+
+provider:
+  name: aws
+  runtime: python3.11
+  region: eu-central-1
+  stage: prod
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+        - secretsmanager:GetSecretValue
+      Resource: '*'
+
+functions:
+  processOrder:
+    handler: order_handler.process_order
+    events:
+      - http:
+          path: orders/process
+          method: post
