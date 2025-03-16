@@ -1,18 +1,25 @@
-name: Deploy to AWS
+name: Deploy or Destroy AWS Resources
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Choose action: deploy or destroy'
+        required: true
+        default: 'deploy'
+        type: choice
+        options:
+          - deploy
+          - destroy
 
 jobs:
-  deploy-lambda:
+  deploy-or-destroy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set Up Node.js (Ensure Compatibility)
+      - name: Set Up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
@@ -27,5 +34,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Deploy Full Serverless Stack
-        run: serverless deploy || serverless deploy function -f processOrder
+      - name: Deploy or Destroy with Serverless
+        run: |
+          if [ "${{ github.event.inputs.action }}" == "destroy" ]; then
+            serverless remove
+          else
+            serverless deploy
+          fi
